@@ -6,6 +6,8 @@ import com.airport.airplane.model.AirPlane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AirPlaneService {
 
@@ -25,6 +27,22 @@ public class AirPlaneService {
         airPlane.setIdAirport(input.getIdAirport());
 
         return airPlaneDao.save(airPlane);
+    }
+
+    public AirPlane findAirPlaneById(int id) {
+        return airPlaneDao.findById(id);
+    }
+
+    public List<AirPlane> findByPagination(String min, String max) {
+        return airPlaneDao.findByPagination(min, max);
+    }
+
+    public AirPlane update(AirPlane input) {
+        return airPlaneDao.update(input);
+    }
+
+    public void delete(int id) {
+        airPlaneDao.deleteById(id);
     }
 
 }

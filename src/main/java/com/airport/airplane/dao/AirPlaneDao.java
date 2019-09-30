@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class AirPlaneDao {
@@ -42,6 +44,110 @@ public class AirPlaneDao {
             e.printStackTrace();
         }
         return airPlane;
+    }
+
+    public List<AirPlane> findByPagination(String min, String max) {
+        List<AirPlane> airPlaneList = new ArrayList<>();
+
+        try {
+            String sql = "select * from airplane limit ?, ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, Integer.parseInt(min));
+            statement.setInt(2, Integer.parseInt(max));
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                AirPlane airPlane = new AirPlane();
+                airPlane.setId(result.getInt("id"));
+                airPlane.setNameAirplane(result.getString("name_airplane"));
+                airPlane.setWidthAirplane(result.getFloat("width_airplane"));
+                airPlane.setHeigthAirplane(result.getFloat("heigth_airplane"));
+                airPlane.setPassengerCapacity(result.getInt("passenger_capacity"));
+                airPlane.setIdAirport(result.getInt("id_airport"));
+
+                airPlaneList.add(airPlane);
+            }
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        return airPlaneList;
+    }
+
+    public AirPlane update(AirPlane input) {
+        AirPlane airPlane = findById(input.getId());
+        if (airPlane.getId() == 0) return null;
+        try {
+            String sql = "update airplane set name_airplane = ?, width_airplane = ?, heigth_airplane = ?, passenger_capacity = ?, id_airport = ? where id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            // Parâmetros sendo adicionado
+            statement.setString(1, input.getNameAirplane());
+            statement.setFloat(2, input.getWidthAirplane());
+            statement.setFloat(3, input.getHeigthAirplane());
+            statement.setInt(4, input.getPassengerCapacity());
+            statement.setInt(5, input.getIdAirport());
+            statement.setInt(6, input.getId());
+            statement.execute(); // SQL sendo executado no banco de dados
+            connection.commit();
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        return input;
+    }
+
+    public AirPlane findById(int id) {
+        AirPlane airPlane = new AirPlane();
+        try {
+            String sql = "select * from airplane where id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+
+            if (result != null && result.next()) {
+                airPlane.setId(result.getInt("id"));
+                airPlane.setNameAirplane(result.getString("name_airplane"));
+                airPlane.setWidthAirplane(result.getFloat("width_airplane"));
+                airPlane.setHeigthAirplane(result.getFloat("heigth_airplane"));
+                airPlane.setPassengerCapacity(result.getInt("passenger_capacity"));
+                airPlane.setIdAirport(result.getInt("id_airport"));
+            }
+
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        return airPlane;
+    }
+
+    public void deleteById(int id) {
+        try {
+            String sql = "delete from airplane where id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            // Parâmetros sendo adicionado
+            statement.setInt(1, id);
+            statement.execute(); // SQL sendo executado no banco de dados
+            connection.commit();
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
     }
 
 }
