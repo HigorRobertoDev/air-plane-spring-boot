@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class AirPlaneDao {
@@ -38,6 +40,34 @@ public class AirPlaneDao {
                 connection.rollback(); // reverte operação caso tenha erros
             } catch (SQLException e1) {
                 e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        return airPlane;
+    }
+
+    public AirPlane findById(int id) {
+        AirPlane airPlane = new AirPlane();
+        try {
+            String sql = "select * from airplane where id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+
+            if (result != null && result.next()) {
+                airPlane.setId(result.getInt("id"));
+                airPlane.setNameAirplane(result.getString("name_airplane"));
+                airPlane.setWidthAirplane(result.getFloat("width_airplane"));
+                airPlane.setHeigthAirplane(result.getFloat("heigth_airplane"));
+                airPlane.setPassengerCapacity(result.getInt("passenger_capacity"));
+                airPlane.setIdAirport(result.getInt("id_airport"));
+            }
+
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
             e.printStackTrace();
         }

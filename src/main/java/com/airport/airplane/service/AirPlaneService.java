@@ -27,4 +27,8 @@ public class AirPlaneService {
         return airPlaneDao.save(airPlane);
     }
 
+    public AirPlane findAirPlaneById(int id) {
+        return airPlaneDao.findById(id);
+    }
+
 }

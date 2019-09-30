@@ -23,4 +23,12 @@ public class AirPlaneController {
         );
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AirPlane> findAirPlaneById(@PathVariable int id) {
+        return new ResponseEntity<>(
+            airPlaneService.findAirPlaneById(id),
+            HttpStatus.OK
+        );
+    }
+
 }
