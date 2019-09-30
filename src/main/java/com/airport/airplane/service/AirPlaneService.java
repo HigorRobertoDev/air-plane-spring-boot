@@ -37,4 +37,8 @@ public class AirPlaneService {
         return airPlaneDao.findByPagination(min, max);
     }
 
+    public AirPlane update(AirPlane input) {
+        return airPlaneDao.update(input);
+    }
+
 }

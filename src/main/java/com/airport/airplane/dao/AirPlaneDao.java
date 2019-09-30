@@ -78,6 +78,32 @@ public class AirPlaneDao {
         return airPlaneList;
     }
 
+    public AirPlane update(AirPlane input) {
+        AirPlane airPlane = findById(input.getId());
+        if (airPlane.getId() == 0) return null;
+        try {
+            String sql = "update airplane set name_airplane = ?, width_airplane = ?, heigth_airplane = ?, passenger_capacity = ?, id_airport = ? where id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            // Parâmetros sendo adicionado
+            statement.setString(1, input.getNameAirplane());
+            statement.setFloat(2, input.getWidthAirplane());
+            statement.setFloat(3, input.getHeigthAirplane());
+            statement.setInt(4, input.getPassengerCapacity());
+            statement.setInt(5, input.getIdAirport());
+            statement.setInt(6, input.getId());
+            statement.execute(); // SQL sendo executado no banco de dados
+            connection.commit();
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        return input;
+    }
+
     public AirPlane findById(int id) {
         AirPlane airPlane = new AirPlane();
         try {

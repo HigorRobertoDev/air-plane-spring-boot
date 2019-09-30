@@ -44,4 +44,12 @@ public class AirPlaneController {
         );
     }
 
+    @PutMapping
+    public ResponseEntity<AirPlane> updateAirPlane(@RequestBody AirPlane input) {
+        return new ResponseEntity<>(
+                airPlaneService.update(input),
+                HttpStatus.OK
+        );
+    }
+
 }
