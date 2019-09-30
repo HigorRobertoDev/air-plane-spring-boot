@@ -6,6 +6,8 @@ import com.airport.airplane.model.AirPlane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AirPlaneService {
 
@@ -29,6 +31,10 @@ public class AirPlaneService {
 
     public AirPlane findAirPlaneById(int id) {
         return airPlaneDao.findById(id);
+    }
+
+    public List<AirPlane> findByPagination(String min, String max) {
+        return airPlaneDao.findByPagination(min, max);
     }
 
 }

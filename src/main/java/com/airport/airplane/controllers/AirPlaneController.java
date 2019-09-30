@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("airplane")
 public class AirPlaneController {
@@ -28,6 +30,17 @@ public class AirPlaneController {
         return new ResponseEntity<>(
             airPlaneService.findAirPlaneById(id),
             HttpStatus.OK
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AirPlane>> findAllAirPlaneByPagination(
+            @RequestParam(defaultValue = "0") String min,
+            @RequestParam(defaultValue = "10") String max
+    ) {
+        return new ResponseEntity<>(
+                airPlaneService.findByPagination(min, max),
+                HttpStatus.OK
         );
     }
 

@@ -46,6 +46,38 @@ public class AirPlaneDao {
         return airPlane;
     }
 
+    public List<AirPlane> findByPagination(String min, String max) {
+        List<AirPlane> airPlaneList = new ArrayList<>();
+
+        try {
+            String sql = "select * from airplane limit ?, ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, Integer.parseInt(min));
+            statement.setInt(2, Integer.parseInt(max));
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                AirPlane airPlane = new AirPlane();
+                airPlane.setId(result.getInt("id"));
+                airPlane.setNameAirplane(result.getString("name_airplane"));
+                airPlane.setWidthAirplane(result.getFloat("width_airplane"));
+                airPlane.setHeigthAirplane(result.getFloat("heigth_airplane"));
+                airPlane.setPassengerCapacity(result.getInt("passenger_capacity"));
+                airPlane.setIdAirport(result.getInt("id_airport"));
+
+                airPlaneList.add(airPlane);
+            }
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        return airPlaneList;
+    }
+
     public AirPlane findById(int id) {
         AirPlane airPlane = new AirPlane();
         try {
