@@ -41,4 +41,8 @@ public class AirPlaneService {
         return airPlaneDao.update(input);
     }
 
+    public void delete(int id) {
+        airPlaneDao.deleteById(id);
+    }
+
 }

@@ -52,4 +52,9 @@ public class AirPlaneController {
         );
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteAirPlane(@PathVariable int id) {
+        airPlaneService.delete(id);
+    }
+
 }

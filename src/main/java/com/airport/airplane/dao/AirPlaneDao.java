@@ -132,4 +132,22 @@ public class AirPlaneDao {
         return airPlane;
     }
 
+    public void deleteById(int id) {
+        try {
+            String sql = "delete from airplane where id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            // Parâmetros sendo adicionado
+            statement.setInt(1, id);
+            statement.execute(); // SQL sendo executado no banco de dados
+            connection.commit();
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+
 }
